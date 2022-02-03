@@ -1,0 +1,5 @@
+formatversion: "1.0"
+project:
+  name: "StaticSite"
+  desc: "Static Website Bopmatic Example Project"
+  sitedir: "site_assets"

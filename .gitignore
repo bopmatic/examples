@@ -1,0 +1,4 @@
+go.sum
+vendor
+*.pb.go
+golang/helloworld/greeter_server
