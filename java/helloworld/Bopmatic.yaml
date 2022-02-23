@@ -1,0 +1,13 @@
+formatversion: "1.0"
+project:
+  name: "HelloWorld"
+  desc: "Hello World Bopmatic Example Project"
+  sitedir: "site_assets"
+  buildcmd: "make"
+  services:
+  - name: "Greeter"
+    desc: "Service for greeting customers"
+    apidef: "src/main/proto/greeter.proto"
+    port: 26001
+    executable: "bin/greeter_server"
+    executable_assets: "build/install/helloworld"
