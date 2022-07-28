@@ -11,6 +11,8 @@ GOMODULE = $(shell go mod edit -json go.mod | jq -r  .Module.Path)
 build: $(SERVICES) site_assets/apitest/bopmatic.swagger.json
 
 go.sum vendor: go.mod $(PROTO_ALL_GENERATED_SRCS)
+	-go mod vendor >/dev/null 2>&1
+	-go mod tidy >/dev/null 2>&1
 	go mod vendor
 
 pb/%.pb.go pb/%_grpc.pb.go pb/%.swagger.json: pb/%.proto
