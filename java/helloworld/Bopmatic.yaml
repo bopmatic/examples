@@ -9,5 +9,5 @@ project:
     desc: "Service for greeting customers"
     apidef: "src/main/proto/greeter.proto"
     port: 26001
-    executable: "bin/greeter_server"
+    executable: "greeter/bin/greeter_server"
     executable_assets: "build/install/greeter"
