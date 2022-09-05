@@ -31,7 +31,7 @@ site_assets/apitest/bopmatic.swagger.json: pb/Orders.bopmatic.json
 	cp $< $@
 
 define SERVICE_RULE
-$(1): $(PROTO_ALL_GENERATED_SRCS) FORCE
+$(1): $(PROTO_ALL_GENERATED_SRCS) vendor FORCE
 	go build $(GOMODULE)/cmd/$(1)
 endef
 $(foreach s,$(SERVICES),$(eval $(call SERVICE_RULE,$(s))))
