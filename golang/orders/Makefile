@@ -17,6 +17,9 @@ deps: $(PROTO_ALL_GENERATED_SRCS)
 	GOPROXY=direct go mod tidy -compat=1.17
 	go mod vendor
 
+vendor:
+	go mod vendor
+
 pb/%.pb.go pb/%_grpc.pb.go pb/%.swagger.json: pb/%.proto
 	protoc -I ./ --go_out ./ --go_opt paths=source_relative --go-grpc_out ./ --go-grpc_opt paths=source_relative --openapiv2_out=./ --openapiv2_opt=simple_operation_ids=true,generate_unbound_methods=true $<
 
