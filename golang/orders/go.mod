@@ -1,4 +1,4 @@
-module github.com/bopmatic/examples/golang/orders
+module mybopmaticproj
 
 go 1.18
 

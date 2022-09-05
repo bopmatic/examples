@@ -13,7 +13,7 @@ build: $(SERVICES) site_assets/apitest/bopmatic.swagger.json
 .PHONY: deps
 deps: $(PROTO_ALL_GENERATED_SRCS)
 	rm -rf go.mod go.sum vendor
-	go mod init github.com/bopmatic/examples/golang/orders
+	go mod init mybopmaticproj
 	GOPROXY=direct go mod tidy -compat=1.17
 	go mod vendor
 

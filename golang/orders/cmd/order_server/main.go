@@ -10,7 +10,8 @@ import (
 	"strconv"
 	"time"
 
-	pb "github.com/bopmatic/examples/golang/orders/pb"
+	pb "mybopmaticproj/pb"
+
 	"google.golang.org/grpc"
 
 	"google.golang.org/protobuf/encoding/protojson"
