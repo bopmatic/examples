@@ -40,7 +40,7 @@ jobs:
                 set -x
                 OLDTAG=$(git describe --tags | cut -f1 -d'-')
                 OLDPATCHVER=$(echo $OLDTAG | rev | cut -f1 -d'.' | rev)
-                NEWPATCHVER=$(( "$OLDPATCHVER" + 1 ))
+                NEWPATCHVER=$(( $OLDPATCHVER + 1 ))
                 NEWTAG=$(echo $OLDTAG | sed "s/$OLDPATCHVER\$/$NEWPATCHVER/")
                 git tag $NEWTAG
                 git push origin main $NEWTAG
