@@ -1,0 +1,6 @@
+*.pb.go
+/order_server
+/pb/Orders.bopmatic.json
+/pb/order.swagger.json
+/site_assets/apitest/bopmatic.swagger.json
+/vendor

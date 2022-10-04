@@ -1,0 +1,6 @@
+*.pb.go
+/greeter_server
+/pb/HelloWorld.bopmatic.json
+/pb/greeter.swagger.json
+/site_assets/apitest/bopmatic.swagger.json
+/vendor

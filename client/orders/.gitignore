@@ -1,0 +1,7 @@
+/build
+/node_modules
+/openapi-generator-cli.jar
+/public/apitest/bopmatic.swagger.json
+/src/openapi/
+/src/pb/Orders.bopmatic.json
+/src/pb/order.swagger.json
