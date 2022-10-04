@@ -38,6 +38,10 @@ jobs:
                 git config --global commit.gpgsign true
                 git commit -a -m "Update to bopmatic examples $CIRCLE_TAG"
                 set -x
+                git describe --tags
+                git describe --tags | rev
+                git describe --tags | rev | cut -f1 -d'.'
+                git describe --tags | rev | cut -f1 -d'.' | rev
                 OLDPATCHVER=$(git describe --tags | rev | cut -f1 -d'.' | rev)
                 NEWPATCHVER=$(( "$OLDPATCHVER" + 1 ))
                 NEWTAG=$(git describe --tags | sed "s/$OLDPATCHVER\$/$NEWPATCHVER/")
