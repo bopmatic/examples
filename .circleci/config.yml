@@ -11,7 +11,6 @@ jobs:
     # https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      # @todo should add java, python, node dependencies to the cache as well
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "golang/helloworld/go.sum" }}
