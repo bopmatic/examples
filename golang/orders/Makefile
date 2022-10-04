@@ -10,14 +10,8 @@ GOMODULE = $(shell go mod edit -json go.mod | jq -r  .Module.Path)
 .PHONY: build
 build: $(SERVICES) site_assets/apitest/bopmatic.swagger.json
 
-.PHONY: deps
-deps: $(PROTO_ALL_GENERATED_SRCS)
-	rm -rf go.mod go.sum vendor
-	go mod init mybopmaticproj
-	GOPROXY=direct go mod tidy -compat=1.17
-	go mod vendor
-
-vendor:
+vendor: go.mod $(PROTO_ALL_GENERATED_SRCS)
+	go mod download
 	go mod vendor
 
 pb/%.pb.go pb/%_grpc.pb.go pb/%.swagger.json: pb/%.proto
@@ -35,6 +29,14 @@ $(1): $(PROTO_ALL_GENERATED_SRCS) vendor FORCE
 	go build $(GOMODULE)/cmd/$(1)
 endef
 $(foreach s,$(SERVICES),$(eval $(call SERVICE_RULE,$(s))))
+
+.PHONY: deps
+deps: $(PROTO_ALL_GENERATED_SRCS)
+	rm -rf go.mod go.sum vendor
+	go mod init mybopmaticproj
+	GOPROXY=direct go mod tidy
+	go mod vendor
+
 
 .PHONY: clean
 clean:
