@@ -11,53 +11,10 @@ jobs:
     # https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - go-mod-v4-{{ checksum "golang/helloworld/go.sum" }}
-            - go-mod-v4-{{ checksum "golang/orders/go.sum" }}
       - run:
           name: Build
           command: |
             make build
-      - save_cache:
-          keys:
-            - go-mod-v4-{{ checksum "golang/helloworld/go.sum" }}
-            - go-mod-v4-{{ checksum "golang/orders/go.sum" }}
-          paths:
-            - "/go/pkg/mod"
-      - run:
-          name: Github release
-          command: |
-            PATH=$PATH:$HOME/go/bin
-            if [ "$CIRCLE_TAG" != "" ]
-            then
-                git clone https://mikeb26:$GITHUB_TOKEN@github.com/bopmatic/build-container
-                cd build-container
-                git remote set-url origin https://mikeb26:$GITHUB_TOKEN@github.com/bopmatic/build-container
-                OLDVER=$(grep 'https://github.com/bopmatic/examples/archive/refs' Dockerfile | rev | cut -f1 -d'/' | rev | sed 's/.tar.gz//' | sed 's/^v//' )
-                NEWVER=$(echo $CIRCLE_TAG | sed 's/^v//' )
-                sed -i "s/$OLDVER/$NEWVER/g" Dockerfile
-                echo $GITHUB_SIGNKEY_PUB | base64 -d > /tmp/gpg.signkey.pub
-                echo $GITHUB_SIGNKEY_PRIV | base64 -d > /tmp/gpg.signkey.priv
-                gpg --import /tmp/gpg.signkey.pub
-                gpg --import /tmp/gpg.signkey.priv
-                git config --global user.email "github@torvosoft.com"
-                git config --global user.name "CircleCI Bot"
-                git config --global user.signingkey $GITHUB_SIGNKEY_ID
-                git config --global commit.gpgsign true
-                git commit -a -m "Update to bopmatic examples $CIRCLE_TAG"
-                OLDPATCHVER=$(git describe --tags | rev | cut -f1 -d'.' | rev)
-                NEWPATCHVER=$(echo $(( "$OLDPATCHVER" + 1 )))
-                NEWTAG=$(git describe --tags | sed "s/$OLDPATCHVER\$/$NEWPATCHVER/")
-                git tag $NEWTAG
-                git push origin main $NEWTAG
-                # @todo scrub?
-                rm -rf $HOME/.gnupg
-                rm -f /tmp/gpg.signkey.pub
-                rm -f /tmp/gpg.signkey.priv
-            else
-                echo "Not triggering build container release for untagged commit"
-            fi
 
 # https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
