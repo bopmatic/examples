@@ -37,7 +37,7 @@ jobs:
                 git config --global user.signingkey $GITHUB_SIGNKEY_ID
                 git config --global commit.gpgsign true
                 git commit -a -m "Update to bopmatic examples $CIRCLE_TAG"
-		set -x
+                set -x
                 OLDPATCHVER=$(git describe --tags | rev | cut -f1 -d'.' | rev)
                 NEWPATCHVER=$(( "$OLDPATCHVER" + 1 ))
                 NEWTAG=$(git describe --tags | sed "s/$OLDPATCHVER\$/$NEWPATCHVER/")
