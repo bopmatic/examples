@@ -36,11 +36,21 @@ const App: React.FC = () => {
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-            <Route path="/page/Home" component={PageHome} exact={true} />
-            <Route path="/page/Placeorder" component={PagePlaceorder} exact={true} />
-            <Route path="/page/Getorder" component={PageGetorder} exact={true} />
-            <Route path="/page/SwaggerUI" component={PageSwaggerUI} exact={true} />
-            <Route path="/" render={() => <Redirect to="/page/Home" />} exact={true} />
+            <Route path="/" exact={true}>
+              <Redirect to="/page/Home" />
+            </Route>
+            <Route path="/page/Home" exact={true}>
+              <PageHome />
+            </Route>
+            <Route path="/page/Placeorder" exact={true}>
+              <PagePlaceorder />
+            </Route>
+            <Route path="/page/Getorder" exact={true}>
+              <PageGetorder />
+            </Route>
+            <Route path="/page/SwaggerUI" exact={true}>
+              <PageSwaggerUI />
+            </Route>
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>

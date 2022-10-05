@@ -1,5 +1,10 @@
 import React from 'react';
 import {
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonMenuButton,
+  IonTitle,
   IonLabel,
   IonButton,
   IonContent,
@@ -65,6 +70,15 @@ const PagePlaceorder: React.FC = () => {
 
   return (
       <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonTitle>Place Order</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+
         <IonContent fullscreen>
           <IonCard>
               <IonCardHeader>
