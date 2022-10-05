@@ -25,10 +25,10 @@ site_assets/apitest/bopmatic.swagger.json: site_assets pb/Orders.bopmatic.json
 	cp pb/Orders.bopmatic.json site_assets/apitest/bopmatic.swagger.json
 
 site_assets: FORCE
-	test -d client && diff -q pb/order.proto client/src/pb/order.proto
-	test -d client && cd client && make build
-	test -d client && rm -rf site_assets
-	test -d client && cp -a client/build site_assets
+	test -d client && diff -q pb/order.proto client/src/pb/order.proto || printf ""
+	test -d client && cd client && make build || printf ""
+	test -d client && rm -rf site_assets || printf ""
+	test -d client && cp -a client/build site_assets || printf ""
 
 define SERVICE_RULE
 $(1): $(PROTO_ALL_GENERATED_SRCS) vendor FORCE
