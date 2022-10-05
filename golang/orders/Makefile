@@ -21,8 +21,14 @@ pb/%.pb.go pb/%_grpc.pb.go pb/%.swagger.json: pb/%.proto
 pb/Orders.bopmatic.json: pb/order.swagger.json
 	jq '{"host":"api.orders.bopmatic.com"} + .' $< | jq '{"schemes":["https"]} + .' > pb/Orders.bopmatic.json > $@
 
-site_assets/apitest/bopmatic.swagger.json: pb/Orders.bopmatic.json
-	cp $< $@
+site_assets/apitest/bopmatic.swagger.json: site_assets pb/Orders.bopmatic.json
+	cp pb/Orders.bopmatic.json site_assets/apitest/bopmatic.swagger.json
+
+site_assets: FORCE
+	test -d client && diff -q pb/order.proto client/src/pb/order.proto
+	test -d client && cd client && make build
+	test -d client && rm -rf site_assets
+	test -d client && cp -a client/build site_assets
 
 define SERVICE_RULE
 $(1): $(PROTO_ALL_GENERATED_SRCS) vendor FORCE
