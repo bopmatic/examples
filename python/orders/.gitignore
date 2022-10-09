@@ -1,0 +1,11 @@
+__pycache__
+*.pyc
+/build
+/dist
+/greeter_server.spec
+/pb/HelloWorld.bopmatic.json
+/pb/greeter.swagger.json
+/pb/greeter_pb2.py
+/pb/greeter_pb2_grpc.py
+/site_assets/apitest/bopmatic.swagger.json
+/.bopmatic
