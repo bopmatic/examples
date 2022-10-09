@@ -17,8 +17,14 @@ pb/order.swagger.json: pb/order.proto
 pb/Orders.bopmatic.json: pb/order.swagger.json
 	jq '{"host":"api.orders.bopmatic.com"} + .' $< | jq '{"schemes":["https"]} + .' > pb/Orders.bopmatic.json > $@
 
-site_assets/apitest/bopmatic.swagger.json: pb/Orders.bopmatic.json
-	cp $< $@
+site_assets/apitest/bopmatic.swagger.json: site_assets pb/Orders.bopmatic.json
+	cp pb/Orders.bopmatic.json site_assets/apitest/bopmatic.swagger.json
+
+site_assets: FORCE
+	test -d client && diff -q pb/order.proto client/src/pb/order.proto || printf ""
+	test -d client && cd client && make build || printf ""
+	test -d client && rm -rf site_assets || printf ""
+	test -d client && cp -a client/build site_assets || printf ""
 
 .PHONY: deps
 deps:
