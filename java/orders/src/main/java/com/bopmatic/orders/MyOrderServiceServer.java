@@ -11,6 +11,9 @@ import io.dapr.client.DaprClient;
 import io.dapr.client.DaprClientBuilder;
 import io.dapr.client.domain.State;
 import reactor.core.publisher.Mono;
+import com.google.protobuf.util.JsonFormat;
+import com.google.protobuf.InvalidProtocolBufferException;
+import java.lang.String;
 
 /**
  * Server that manages startup/shutdown of a {@code MyOrderService} server.
@@ -19,6 +22,12 @@ public class MyOrderServiceServer {
   private static final Logger logger = Logger.getLogger(MyOrderServiceServer.class.getName());
 
   private Server server;
+
+  public class EncodingException extends RuntimeException {
+    public EncodingException(String errorMessage, Throwable err) {
+      super(errorMessage, err);
+    }
+  }
 
   private void start() throws IOException {
     DaprClient daprClient = new DaprClientBuilder().build();
@@ -69,7 +78,11 @@ public class MyOrderServiceServer {
     server.blockUntilShutdown();
   }
 
-  static class MyOrderServiceImpl extends MyOrderServiceGrpc.MyOrderServiceImplBase {
+  public MyOrderServiceImpl newImpl(DaprClient daprClientIn) {
+      return new MyOrderServiceImpl(daprClientIn);
+  }        
+
+  class MyOrderServiceImpl extends MyOrderServiceGrpc.MyOrderServiceImplBase {
     public DaprClient daprClient;
     public final String OrdersTable = "Customers.OrderTable";
 
@@ -85,13 +98,20 @@ public class MyOrderServiceServer {
       long orderTimeInNanos = System.currentTimeMillis() * 1000000;
 
       Order order = Order.newBuilder().setTimestampInNanos(orderTimeInNanos).setDesc(req.getDesc()).build();
+      try {
+          String orderEncoded = JsonFormat.printer().print(order);
 
-      daprClient.saveState(OrdersTable, Long.toHexString(orderId), order).block();
+          // cannot use order directly due to some internal dapr serialization problem:
+          //   io.dapr.exceptions.DaprException: INTERNAL: failed saving state in state store Customers.OrderTable: SerializationException: malformed input around byte 129 
+          daprClient.saveState(OrdersTable, Long.toHexString(orderId), orderEncoded).block();
 
-      PlaceOrderReply reply = PlaceOrderReply.newBuilder().setOrderId(orderId).setTimestampInNanos(orderTimeInNanos).build();
+          PlaceOrderReply reply = PlaceOrderReply.newBuilder().setOrderId(orderId).setTimestampInNanos(orderTimeInNanos).build();
 
-      responseObserver.onNext(reply);
-      responseObserver.onCompleted();
+          responseObserver.onNext(reply);
+          responseObserver.onCompleted();
+      } catch (InvalidProtocolBufferException e) {
+          throw new EncodingException("Failed to encode order:" + Long.toHexString(orderId), e);
+      }
     }
 
     @Override
@@ -99,13 +119,20 @@ public class MyOrderServiceServer {
 
       String orderIdStr = Long.toHexString(req.getOrderId());
 
-      Mono<State<Order>> orderMono = daprClient.getState(OrdersTable, orderIdStr, Order.class);
-      Order order = orderMono.block().getValue();
+      Mono<State<String>> orderMono = daprClient.getState(OrdersTable, orderIdStr, java.lang.String.class);
+      String orderEncoded = orderMono.block().getValue();
+      Order.Builder orderBuilder = Order.newBuilder();
+      try {
+          JsonFormat.parser().merge(orderEncoded, orderBuilder);
+          Order order = orderBuilder.build();
 
-      GetOrderReply reply = GetOrderReply.newBuilder().setOrder(order).build();
+          GetOrderReply reply = GetOrderReply.newBuilder().setOrder(order).build();
 
-      responseObserver.onNext(reply);
-      responseObserver.onCompleted();
+          responseObserver.onNext(reply);
+          responseObserver.onCompleted();
+      } catch (InvalidProtocolBufferException e) {
+          throw new EncodingException("Failed to decode order:" + orderIdStr, e);
+      }
     }
   }
 }

@@ -13,10 +13,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import com.bopmatic.orders.MyOrderServiceServer;
 import com.bopmatic.orders.MyOrderServiceServer.MyOrderServiceImpl;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.testing.GrpcCleanupRule;
+import com.google.protobuf.util.JsonFormat;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.Before;
@@ -67,13 +69,16 @@ public class MyOrderServiceServerTest {
 
     OrderDetails orderDescIn = OrderDetails.newBuilder().setCustomerId(CustomerId).setItemDescription(ItemDesc).setItemCost(ItemCost).build();
     Order orderIn = Order.newBuilder().setTimestampInNanos(OrderTimestamp).setDesc(orderDescIn).build();
-    Mono<State<Order>> orderStateMonoIn = Mono.just(new State<Order>(OrderId, orderIn, null, null));
+    String orderEncodedIn = JsonFormat.printer().print(orderIn);
+    
+    Mono<State<String>> orderStateMonoIn = Mono.just(new State<String>(OrderId, orderEncodedIn, null, null));
 
-    when(mockDaprClient.getState(anyString(), anyString(), eq(Order.class))).thenReturn(orderStateMonoIn);
+    when(mockDaprClient.getState(anyString(), anyString(), eq(java.lang.String.class))).thenReturn(orderStateMonoIn);
 
     // Create a server, add service, start, and register for automatic graceful shutdown.
+    MyOrderServiceServer orderServiceServer = new MyOrderServiceServer();
     grpcCleanup.register(InProcessServerBuilder
-        .forName(serverName).directExecutor().addService(new MyOrderServiceImpl(mockDaprClient)).build().start());
+        .forName(serverName).directExecutor().addService(orderServiceServer.newImpl(mockDaprClient)).build().start());
 
     MyOrderServiceGrpc.MyOrderServiceBlockingStub blockingStub = MyOrderServiceGrpc.newBlockingStub(
         // Create a client channel and register for automatic graceful shutdown.
