@@ -1,0 +1,6 @@
+/build
+/.gradle
+/site_assets/apitest/bopmatic.swagger.json
+/src/main/proto/greeter.bopmatic.json
+/src/main/proto/greeter.swagger.json
+/.bopmatic

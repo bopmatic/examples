@@ -1,0 +1,20 @@
+formatversion: "1.0"
+project:
+  name: "Orders"
+  desc: "Sales ordering Bopmatic Example Project"
+  sitedir: "site_assets"
+  buildcmd: "make"
+  services:
+  - name: "MyOrderService"
+    desc: "Service for placing & retriving a customer order"
+    apidef: "src/main/proto/order.proto"
+    port: 26001
+    executable: "myorderservice/bin/order_server"
+    executable_assets: "build/install/myorderservice"
+  databases:
+  - name: "Customers"
+    desc: "Customer database"
+    tables:
+    - name: "OrderTable"
+      desc: "customer order tracking"
+    services_access: [ "MyOrderService" ]

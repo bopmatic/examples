@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.bopmatic.orders";
+option java_outer_classname = "MyOrdersServiceProto";
+option objc_class_prefix = "HLW";
+
+service MyOrderService {
+  rpc PlaceOrder (PlaceOrderRequest) returns (PlaceOrderReply) {}
+  rpc GetOrder (GetOrderRequest) returns (GetOrderReply) {}
+  // @todo rpc ListOrders (ListOrdersRequest) returns (ListOrdersReply) {}
+}
+
+message OrderDetails {
+  uint64 customerId = 1;
+  string itemDescription = 2;
+  double itemCost = 3;
+}
+
+message Order {
+  uint64 timestampInNanos = 1;
+  OrderDetails desc = 2;
+}
+
+message PlaceOrderRequest {
+  OrderDetails desc = 1;
+}
+
+message PlaceOrderReply {
+  uint64 orderId = 1;
+  uint64 timestampInNanos = 2;
+}
+
+message GetOrderRequest {
+  uint64 orderId = 1;
+}
+
+message GetOrderReply {
+  Order order = 1;
+}
