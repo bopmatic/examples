@@ -9,8 +9,8 @@ project:
     desc: "Service for placing & retriving a customer order"
     apidef: "src/main/proto/order.proto"
     port: 26001
-    executable: "myorderservice/bin/order_server"
-    executable_assets: "build/install/myorderservice"
+    executable: "order/bin/order_server"
+    executable_assets: "build/install/order"
   databases:
   - name: "Customers"
     desc: "Customer database"
