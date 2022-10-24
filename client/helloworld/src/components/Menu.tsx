@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { cartOutline, cartSharp, pricetagOutline, pricetagSharp, homeOutline, homeSharp } from 'ionicons/icons';
+import { cartOutline, cartSharp, homeOutline, homeSharp } from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
