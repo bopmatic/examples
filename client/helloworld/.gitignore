@@ -3,5 +3,7 @@
 /openapi-generator-cli.jar
 /public/apitest/bopmatic.swagger.json
 /src/openapi/
+/src/pb/HelloWorld.bopmatic.json
 /src/pb/Greeter.bopmatic.json
 /src/pb/greeter.swagger.json
+
