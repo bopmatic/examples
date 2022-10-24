@@ -14,7 +14,7 @@ site_assets/apitest/bopmatic.swagger.json: site_assets src/main/proto/Orders.bop
 	cp src/main/proto/Orders.bopmatic.json site_assets/apitest/bopmatic.swagger.json
 
 site_assets: FORCE
-	test -d client && diff -q pb/order.proto client/src/pb/order.proto || printf ""
+	test -d client && diff -q src/main/proto/order.proto client/src/pb/order.proto || printf ""
 	test -d client && cd client && make build || printf ""
 	test -d client && rm -rf site_assets || printf ""
 	test -d client && cp -a client/build site_assets || printf ""
