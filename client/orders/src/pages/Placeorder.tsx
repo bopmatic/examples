@@ -20,7 +20,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { Configuration, MyOrderServiceApi, PlaceOrderOperationRequest, PlaceOrderReply } from "../openapi";
+import { Configuration, MyOrderServiceApi, PlaceOrderRequest, PlaceOrderReply } from "../openapi";
 
 const PagePlaceorder: React.FC = () => {
   const {
@@ -47,21 +47,20 @@ const PagePlaceorder: React.FC = () => {
    * @param data
    */
   const onSubmit = async (data: any) => {
-    const req:PlaceOrderOperationRequest = {
-        body: {
-            desc: {
+    const req:PlaceOrderRequest = {
+        desc: {
                 customerId: data.customerId,
                 itemDescription: data.itemDesc,
                 itemCost: data.itemCost
-            }
-         }
+        }
     };
 
     try {
-        const resp: PlaceOrderReply = await ordersApi.placeOrder(req);
-	var timestampInMillis = Number(resp.timestampInNanos) / 1000000
-	var date = new Date(timestampInMillis);
-	var dateStr = date.toLocaleDateString("default") + ' ' + date.toLocaleTimeString("default")
+        const respWrapper = await ordersApi.placeOrder(req);
+        const resp: PlaceOrderReply = respWrapper.data;
+        var timestampInMillis = Number(resp.timestampInNanos) / 1000000
+        var date = new Date(timestampInMillis);
+        var dateStr = date.toLocaleDateString("default") + ' ' + date.toLocaleTimeString("default")
         alert('Successfully placed order id:' + resp.orderId + ' time:' + dateStr)
     } catch(e) {
         alert('Failed to place order: ' + e)

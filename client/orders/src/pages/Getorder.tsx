@@ -19,7 +19,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { Configuration, MyOrderServiceApi, GetOrderOperationRequest, GetOrderReply } from "../openapi";
+import { Configuration, MyOrderServiceApi, GetOrderRequest, GetOrderReply } from "../openapi";
 
 const PageGetorder: React.FC = () => {
   const {
@@ -44,14 +44,13 @@ const PageGetorder: React.FC = () => {
    * @param data
    */
   const onSubmit = async (data: any) => {
-    const req:GetOrderOperationRequest = {
-        body: {
-            orderId: data.orderId,
-         }
+    const req:GetOrderRequest = {
+      orderId: data.orderId,
     };
 
     try {
-        const resp: GetOrderReply = await ordersApi.getOrder(req);
+        const respWrapper = await ordersApi.getOrder(req);
+        const resp: GetOrderReply = respWrapper.data;
 	var timestampInMillis = Number(resp?.order?.timestampInNanos) / 1000000
 	var date = new Date(timestampInMillis);
 	var dateStr = date.toLocaleDateString("default") + ' ' + date.toLocaleTimeString("default")
