@@ -105,6 +105,11 @@ func main() {
 	}
 	defer daprClient.Close()
 
+	err = daprClient.Wait(context.Background(), 10*time.Second)
+	if err != nil {
+		log.Fatalf("failed to establish dapr client: %v", err)
+	}
+
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))
 	if err != nil {
