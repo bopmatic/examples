@@ -20,7 +20,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { Configuration, GreeterApi, SayHelloRequest, HelloReply } from "../openapi";
+import { Configuration, GreeterApi, HelloRequest, HelloReply } from "../openapi";
 
 const PageSayHello: React.FC = () => {
   const {
@@ -45,14 +45,13 @@ const PageSayHello: React.FC = () => {
    * @param data
    */
   const onSubmit = async (data: any) => {
-    const req:SayHelloRequest = {
-        body: {
-            name: data.name,
-         }
+    const req:HelloRequest = {
+        name: data.name,
     };
 
     try {
-        const resp: HelloReply = await greeterApi.sayHello(req);
+        const respWrapper = await greeterApi.sayHello(req);
+	const resp: HelloReply = respWrapper.data;
         alert('Server replied with: ' + resp.message)
     } catch(e) {
         alert('Failed to say hello: ' + e)

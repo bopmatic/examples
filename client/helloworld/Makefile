@@ -1,4 +1,4 @@
-OPENAPIGENJS=java -jar ./openapi-generator-cli.jar generate -g typescript-fetch -o src/openapi --git-host github.com --git-user-id bopmatic --git-repo-id examples/helloworld/openapi --additional-properties=supportsES6=true,npmVersion=6.9.0,typescriptThreePlus=true
+OPENAPIGENJS=java -jar ./openapi-generator-cli.jar generate -g typescript-axios -o src/openapi --git-host github.com --git-user-id bopmatic --git-repo-id examples/helloworld/openapi --additional-properties=supportsES6=true,npmVersion=6.9.0,typescriptThreePlus=true
 
 build: src/openapi public/apitest/bopmatic.swagger.json node_modules FORCE
 	ionic build
