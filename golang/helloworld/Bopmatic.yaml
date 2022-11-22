@@ -3,6 +3,7 @@ project:
   name: "HelloWorld"
   desc: "Hello World Bopmatic Example Project"
   sitedir: "site_assets"
+  runtime_config: bopmatic-config.js
   buildcmd: "make"
   services:
   - name: "Greeter"
