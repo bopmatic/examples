@@ -5,6 +5,10 @@ import { BopmaticConfig } from "../bopmatic";
 
 const PageHome: React.FC = () => {
   const pkgId : string = BopmaticConfig('PACKAGE_ID')
+  const websiteUrl : string = BopmaticConfig('WEBSITE_ENDPOINT')
+  const websiteAliasUrl : string = BopmaticConfig('WEBSITE_ALIAS_ENDPOINT')
+  const sayHelloUrl : string = BopmaticConfig('GREETER_SAYHELLO_API_ENDPOINT')
+
   return (
         <IonPage>
           <IonHeader>
@@ -32,8 +36,20 @@ const PageHome: React.FC = () => {
               <IonCardContent>
                 <IonGrid>
                   <IonRow>
-                    <IonCol>BOPMATIC_PACKAGE_ID</IonCol>
+                    <IonCol>PACKAGE_ID</IonCol>
                     <IonCol>{pkgId}</IonCol>
+                  </IonRow>
+                  <IonRow>
+                    <IonCol>WEBSITE_ENDPOINT</IonCol>
+                    <IonCol>{websiteUrl}</IonCol>
+                  </IonRow>
+                  <IonRow>
+                    <IonCol>WEBSITE_ALIAS_ENDPOINT</IonCol>
+                    <IonCol>{websiteAliasUrl}</IonCol>
+                  </IonRow>
+                  <IonRow>
+                    <IonCol>GREETER_SAYHELLO_API_ENDPOINT</IonCol>
+                    <IonCol>{sayHelloUrl}</IonCol>
                   </IonRow>
                 </IonGrid>
               </IonCardContent>
