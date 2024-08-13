@@ -45,8 +45,8 @@ const devPages: AppPage[] = [
   {
     title: 'SwaggerUI',
     url: '/page/SwaggerUI',
-    iosIcon: '/assets/icon/swagger.svg',
-    mdIcon: '/assets/icon/swagger.svg',
+    iosIcon: '/swagger.svg',
+    mdIcon: '/swagger.svg',
   }
 ];
 

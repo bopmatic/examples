@@ -2,6 +2,7 @@ OPENAPIGENJS=java -jar ./openapi-generator-cli.jar generate -g typescript-axios 
 
 build: src/openapi public/apitest/bopmatic.swagger.json node_modules FORCE
 	ionic build
+	cp -a dist build
 
 .PHONY: deps
 deps: src/openapi
@@ -25,7 +26,7 @@ public/apitest/bopmatic.swagger.json: src/pb/HelloWorld.bopmatic.json
 	cp src/pb/HelloWorld.bopmatic.json public/apitest/bopmatic.swagger.json
 
 openapi-generator-cli.jar:
-	curl -L https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/6.2.0/openapi-generator-cli-6.2.0.jar --output openapi-generator-cli.jar
+	curl -L https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.7.0/openapi-generator-cli-7.7.0.jar --output openapi-generator-cli.jar
 
 node_modules: package.json
 	npm install
@@ -35,6 +36,6 @@ src/openapi: openapi-generator-cli.jar src/pb/HelloWorld.bopmatic.json
 
 .PHONY: clean
 clean:
-	rm -rf src/pb/greeter.swagger.json src/pb/HelloWorld.bopmatic.json src/openapi build public/apitest/bopmatic.swagger.json
+	rm -rf src/pb/greeter.swagger.json src/pb/HelloWorld.bopmatic.json src/openapi build public/apitest/bopmatic.swagger.json dist
 
 FORCE:
