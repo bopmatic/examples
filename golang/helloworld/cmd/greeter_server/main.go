@@ -7,7 +7,8 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/bopmatic/examples/golang/helloworld/pb"
+	pb "mybopmaticproj/pb"
+
 	"google.golang.org/grpc"
 )
 

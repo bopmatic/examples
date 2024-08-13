@@ -39,7 +39,7 @@ $(foreach s,$(SERVICES),$(eval $(call SERVICE_RULE,$(s))))
 .PHONY: deps
 deps: $(PROTO_ALL_GENERATED_SRCS)
 	rm -rf go.mod go.sum vendor
-	go mod init github.com/bopmatic/examples/golang/helloworld
+	go mod init mybopmaticproj
 	GOPROXY=direct go mod tidy -compat=1.17
 	go mod vendor
 
