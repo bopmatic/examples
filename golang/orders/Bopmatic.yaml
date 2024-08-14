@@ -3,6 +3,7 @@ project:
   name: "Orders"
   desc: "Sales ordering Bopmatic Example Project"
   sitedir: "site_assets"
+  runtime_config: bopmatic-config.js
   buildcmd: "make"
   services:
   - name: "MyOrderService"
