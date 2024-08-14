@@ -5,3 +5,4 @@
 /src/openapi/
 /src/pb/Orders.bopmatic.json
 /src/pb/order.swagger.json
+/dist

@@ -2,7 +2,6 @@ import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/r
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import Menu from './components/Menu';
-//import Page from './pages/Page';
 import PagePlaceorder from './pages/Placeorder';
 import PageHome from './pages/Home';
 import PageGetorder from './pages/Getorder';
@@ -23,6 +22,17 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* import '@ionic/react/css/palettes/dark.always.css'; */
+/* import '@ionic/react/css/palettes/dark.class.css'; */
+import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';

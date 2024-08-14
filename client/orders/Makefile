@@ -2,6 +2,8 @@ OPENAPIGENJS=java -jar ./openapi-generator-cli.jar generate -g typescript-axios 
 
 build: src/openapi public/apitest/bopmatic.swagger.json node_modules FORCE
 	ionic build
+	rm -rf build
+	cp -a dist build
 
 .PHONY: deps
 deps: src/openapi
@@ -35,6 +37,6 @@ src/openapi: openapi-generator-cli.jar src/pb/Orders.bopmatic.json
 
 .PHONY: clean
 clean:
-	rm -rf src/pb/order.swagger.json src/pb/Orders.bopmatic.json src/openapi build public/apitest/bopmatic.swagger.json
+	rm -rf src/pb/order.swagger.json src/pb/Orders.bopmatic.json src/openapi build public/apitest/bopmatic.swagger.json dist
 
 FORCE:
