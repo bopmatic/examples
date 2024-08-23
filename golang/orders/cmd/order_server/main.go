@@ -98,6 +98,8 @@ func (s *server) GetOrder(ctx context.Context, in *pb.GetOrderRequest) (*pb.GetO
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
+	log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
+
 	var err error
 	daprClient, err = dapr.NewClient()
 	if err != nil {
