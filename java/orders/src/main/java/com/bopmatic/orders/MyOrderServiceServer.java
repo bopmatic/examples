@@ -94,6 +94,10 @@ public class MyOrderServiceServer {
     public void placeOrder(PlaceOrderRequest req, StreamObserver<PlaceOrderReply> responseObserver) {
 
       long orderId = ThreadLocalRandom.current().nextLong();
+      logger.info("PlaceOrder: start: id:" + orderId + " order{customerId:" +
+                  req.getDesc().getCustomerId() + ", item:" +
+                  req.getDesc().getItemDescription() + ", cost:" +
+                  req.getDesc().getItemCost() + "}");
       // annoyingly Java doesn't appear to have nanosecond precision?
       long orderTimeInNanos = System.currentTimeMillis() * 1000000;
 
@@ -112,11 +116,13 @@ public class MyOrderServiceServer {
       } catch (InvalidProtocolBufferException e) {
           throw new EncodingException("Failed to encode order:" + Long.toHexString(orderId), e);
       }
+      logger.info("PlaceOrder: complete: id:" + orderId);
     }
 
     @Override
     public void getOrder(GetOrderRequest req, StreamObserver<GetOrderReply> responseObserver) {
 
+      logger.info("GetOrder: start: id:" + req.getOrderId());
       String orderIdStr = Long.toHexString(req.getOrderId());
 
       Mono<State<String>> orderMono = daprClient.getState(OrdersTable, orderIdStr, java.lang.String.class);
@@ -133,6 +139,7 @@ public class MyOrderServiceServer {
       } catch (InvalidProtocolBufferException e) {
           throw new EncodingException("Failed to decode order:" + orderIdStr, e);
       }
+      logger.info("GetOrder: complete: id:" + req.getOrderId());
     }
   }
 }
