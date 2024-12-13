@@ -27,20 +27,23 @@ class Order(pb.order_pb2_grpc.MyOrderServiceServicer):
             self, request: pb.order_pb2.PlaceOrderRequest,
             context: grpc.aio.ServicerContext) -> pb.order_pb2.PlaceOrderReply:
 
+        myOrderId = random.getrandbits(64)
+        logging.info("PlaceOrder: start: id:%s order{customerId:%s, item:%s, cost:%s}",	myOrderId, request.desc.customerId, request.desc.itemDescription, request.desc.itemCost)
         order = pb.order_pb2.Order(desc = request.desc)
         order.timestampInNanos = time.time_ns()
         orderEncoded = MessageToJson(order)
-        myOrderId = random.getrandbits(64)
         self.daprClient.save_state(store_name=self.ordersTable, key=format(myOrderId, 'x'), value=orderEncoded)
-        
+        logging.info("PlaceOrder: complete: id:%s", myOrderId)
         return pb.order_pb2.PlaceOrderReply(orderId=myOrderId, timestampInNanos=order.timestampInNanos)
 
     async def GetOrder(
             self, request: pb.order_pb2.GetOrderRequest,
             context: grpc.aio.ServicerContext) -> pb.order_pb2.GetOrderReply:
 
+        logging.info("GetOrder: start: id:%s", request.orderId)
         state = self.daprClient.get_state(store_name=self.ordersTable, key=format(request.orderId, 'x'))
         myOrder = Parse(state.data, pb.order_pb2.Order())
+        logging.info("GetOrder: complete: id:%s", request.orderId)
         return pb.order_pb2.GetOrderReply(order=myOrder)
 
 async def serve() -> None:

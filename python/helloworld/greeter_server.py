@@ -28,6 +28,7 @@ class Greeter(pb.greeter_pb2_grpc.GreeterServicer):
     async def SayHello(
             self, request: pb.greeter_pb2.HelloRequest,
             context: grpc.aio.ServicerContext) -> pb.greeter_pb2.HelloReply:
+        logging.info("SayHello: request from %s", request.name)
         return pb.greeter_pb2.HelloReply(message='Hello from Bopmatic Python, %s!' % request.name)
 
 
