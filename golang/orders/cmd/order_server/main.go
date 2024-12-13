@@ -16,6 +16,7 @@ import (
 
 	"google.golang.org/protobuf/encoding/protojson"
 
+	"github.com/bopmatic/sdk/golang/util"
 	dapr "github.com/dapr/go-sdk/client"
 )
 
@@ -35,13 +36,15 @@ type server struct {
 	pb.UnimplementedMyOrderServiceServer
 }
 
-func (s *server) PlaceOrder(ctx context.Context, in *pb.PlaceOrderRequest) (*pb.PlaceOrderReply, error) {
-
-	log.Printf("PlaceOrder: new order customerId:%v item:%v cost:%v",
-		in.Desc.GetCustomerId(), in.Desc.GetItemDescription(),
-		in.Desc.GetItemCost())
+func (s *server) PlaceOrder(ctx context.Context,
+	in *pb.PlaceOrderRequest) (*pb.PlaceOrderReply, error) {
 
 	orderId := rand.Uint64()
+
+	log.Printf("PlaceOrder: start: id:%v order{customerId:%v, item:%v, cost:%v}",
+		orderId, in.Desc.GetCustomerId(), in.Desc.GetItemDescription(),
+		in.Desc.GetItemCost())
+
 	order := &pb.Order{
 		TimestampInNanos: uint64(time.Now().UnixNano()),
 		Desc:             in.GetDesc(),
@@ -67,16 +70,19 @@ func (s *server) PlaceOrder(ctx context.Context, in *pb.PlaceOrderRequest) (*pb.
 		TimestampInNanos: order.TimestampInNanos,
 	}
 
+	log.Printf("PlaceOrder: complete: id:%v", orderId)
+
 	return reply, nil
 }
 
-func (s *server) GetOrder(ctx context.Context, in *pb.GetOrderRequest) (*pb.GetOrderReply, error) {
+func (s *server) GetOrder(ctx context.Context,
+	in *pb.GetOrderRequest) (*pb.GetOrderReply, error) {
 
 	orderId := in.GetOrderId()
-	log.Printf("GetOrder: lookup up orderId:%v", orderId)
+	log.Printf("GetOrder: start: id:%v", orderId)
 
-	result, err := daprClient.GetState(ctx, ordersTable, strconv.FormatUint(orderId,
-		16), nil)
+	result, err := daprClient.GetState(ctx, ordersTable,
+		strconv.FormatUint(orderId, 16), nil)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to retrieve orderId:%v: %v", orderId, err)
 	}
@@ -92,25 +98,21 @@ func (s *server) GetOrder(ctx context.Context, in *pb.GetOrderRequest) (*pb.GetO
 		Order: &order,
 	}
 
+	log.Printf("GetOrder: complete: id:%v", orderId)
+
 	return reply, nil
 }
 
 func main() {
+	log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
 	rand.Seed(time.Now().UnixNano())
 
-	log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
-
 	var err error
-	daprClient, err = dapr.NewClient()
+	daprClient, err = util.NewDaprClient(context.Background())
 	if err != nil {
-		log.Fatalf("failed to initialize dapr client: %v", err)
+		log.Fatalf("failed to init dapr client: %v", err)
 	}
 	defer daprClient.Close()
-
-	err = daprClient.Wait(context.Background(), 10*time.Second)
-	if err != nil {
-		log.Fatalf("failed to establish dapr client: %v", err)
-	}
 
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))
@@ -119,7 +121,8 @@ func main() {
 	}
 	s := grpc.NewServer()
 	pb.RegisterMyOrderServiceServer(s, &server{})
-	log.Printf("server listening at %v", lis.Addr())
+
+	log.Printf("server listening at port %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
