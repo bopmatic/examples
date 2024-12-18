@@ -1,0 +1,15 @@
+formatversion: "1.1"
+project:
+  name: "helloworld"
+  desc: "Hello World Bopmatic Example Project"
+  services:
+  - name: "Greeter"
+    desc: "Service for greeting customers"
+    apidef: "pb/greeter.proto"
+    port: 26001
+    executable: "build/rungreeter.sh"
+    executable_assets: "build"
+    user_access: "anon_public"
+  sitedir: "site_assets"
+  runtime_config: "bopmatic-config.js"
+  buildcmd: "make"
