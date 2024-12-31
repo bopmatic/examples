@@ -30,9 +30,9 @@ const PagePlaceorder: React.FC = () => {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      customerId: '0',
-      itemDesc: 'some item',
-      itemCost: 0.00,
+      customerId: '8053003192449',
+      itemDesc: 'large iced coffee',
+      itemCost: 3.99,
     }
   });
 

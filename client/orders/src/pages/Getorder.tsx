@@ -29,7 +29,7 @@ const PageGetorder: React.FC = () => {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      orderId: '0'
+      orderId: ''
     }
   });
 
