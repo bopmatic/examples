@@ -7,7 +7,7 @@ project:
     desc: "Service for placing & retriving a customer order"
     apidef: "pb/order.proto"
     port: 26001
-    executable: "build/runorders.sh"
+    executable: "build/runorder_server.sh"
     executable_assets: "build"
     user_access: "anon_public"
   databases:
