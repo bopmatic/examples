@@ -3,7 +3,7 @@ build: order site_assets/apitest/bopmatic.swagger.json
 	cp -a pb/*.js build/pb
 	cp -a order_server.js build
 	cp -a node_modules build
-	cp -a runorders.sh build
+	cp -a runorder_server.sh build
 
 .PHONY: order
 order: pb/order_pb.js
