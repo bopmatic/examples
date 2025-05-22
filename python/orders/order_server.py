@@ -18,7 +18,7 @@ class Order(pb.order_pb2_grpc.MyOrderServiceServicer):
     daprClient = None
     # table name is of the format <database>.<table> where database and
     # table are what you've defined in your Bopmatic.yaml
-    ordersTable = "Customers.OrderTable"
+    ordersTable = "Orders.prod.Customers.OrderTable"
 
     def __init__(self, daprClientIn):
         self.daprClient = daprClientIn
