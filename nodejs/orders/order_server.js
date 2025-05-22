@@ -6,7 +6,7 @@ var services = require('./pb/order_grpc_pb');
 const serverHost = "127.0.0.1";
 const serverPort = "50051";
 const client = new dapr.DaprClient({ serverHost, serverPort, communicationProtocol: dapr.CommunicationProtocolEnum.GRPC });
-const ordersTable = "Customers.OrderTable"
+const ordersTable = "Orders.prod.Customers.OrderTable"
 
 async function placeOrder(call, callback) {
   let orderId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
