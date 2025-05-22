@@ -84,7 +84,7 @@ public class MyOrderServiceServer {
 
   class MyOrderServiceImpl extends MyOrderServiceGrpc.MyOrderServiceImplBase {
     public DaprClient daprClient;
-    public final String OrdersTable = "Customers.OrderTable";
+    public final String OrderTable = "Orders.prod.Customers.OrderTable";
 
     MyOrderServiceImpl(DaprClient daprClientIn) {
         daprClient = daprClientIn;
@@ -107,7 +107,7 @@ public class MyOrderServiceServer {
 
           // cannot use order directly due to some internal dapr serialization problem:
           //   io.dapr.exceptions.DaprException: INTERNAL: failed saving state in state store Customers.OrderTable: SerializationException: malformed input around byte 129 
-          daprClient.saveState(OrdersTable, Long.toHexString(orderId), orderEncoded).block();
+          daprClient.saveState(OrderTable, Long.toHexString(orderId), orderEncoded).block();
 
           PlaceOrderReply reply = PlaceOrderReply.newBuilder().setOrderId(orderId).setTimestampInNanos(orderTimeInNanos).build();
 
@@ -125,7 +125,7 @@ public class MyOrderServiceServer {
       logger.info("GetOrder: start: id:" + req.getOrderId());
       String orderIdStr = Long.toHexString(req.getOrderId());
 
-      Mono<State<String>> orderMono = daprClient.getState(OrdersTable, orderIdStr, java.lang.String.class);
+      Mono<State<String>> orderMono = daprClient.getState(OrderTable, orderIdStr, java.lang.String.class);
       String orderEncoded = orderMono.block().getValue();
       Order.Builder orderBuilder = Order.newBuilder();
       try {
