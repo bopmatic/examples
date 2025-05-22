@@ -27,9 +27,10 @@ var (
 )
 
 const (
-	// table name is of the format <database>.<table> where database and
-	// table are what you've defined in your Bopmatic.yaml
-	ordersTable = "Customers.OrderTable"
+	// table name is of the format <project>.prod.<database>.<table> where
+	// project, database, and table are what you've defined in your
+	// project's Bopmatic.yaml
+	ordersTable = "Orders.prod.Customers.OrderTable"
 )
 
 type server struct {
